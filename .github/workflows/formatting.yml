@@ -68,6 +68,18 @@ jobs:
         run: cargo install --force --debug --version 0.14.1 cbindgen
       - run: echo "::add-path::$HOME/.cargo/bin"
       - uses: actions/checkout@v1
+      # If master has newer commits, github adds a merge commit from master into
+      # our branch.
+      # This screws up git clang-format as it'll format the merge as well and
+      # reports any formatting issues in those commits on master as well.
+      # We don't care about them here. So let's drop the merge commit before
+      # running git clang-format.
+      - name: Drop potential master merge
+        run: |
+          if [ "${GITHUB_REF##*/}" == "merge" ]; then
+              git checkout HEAD^
+          fi
+          git log -3 --oneline
       - run: git clone https://github.com/OISF/libhtp -b 0.5.x
       - run: ./autogen.sh
       - run: ./configure --enable-unittests
