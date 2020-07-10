@@ -68,7 +68,7 @@ jobs:
         run: cargo install --force --debug --version 0.14.1 cbindgen
       - run: echo "::add-path::$HOME/.cargo/bin"
       - name: Checkout HEAD on branch, not merge commit!
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       # If master has newer commits, github adds a merge commit from master into
