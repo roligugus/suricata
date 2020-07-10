@@ -76,9 +76,7 @@ jobs:
       # running git clang-format.
       - name: Drop potential master merge
         run: |
-          if [[ ${GITHUB_REF##*/} =~ ^merge$ ]]; then
-              git checkout HEAD^
-          fi
+          test "${GITHUB_REF##*/}" == "merge" && git checkout HEAD^
           git log -3 --oneline
       - run: git clone https://github.com/OISF/libhtp -b 0.5.x
       - run: ./autogen.sh
