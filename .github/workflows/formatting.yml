@@ -76,7 +76,7 @@ jobs:
       # running git clang-format.
       - name: Drop potential master merge
         run: |
-          if "${GITHUB_REF##*/}" == "merge" ; then
+          if test "${GITHUB_REF##*/}" == "merge" ; then
               git checkout HEAD^
           fi
           git log -3 --oneline
