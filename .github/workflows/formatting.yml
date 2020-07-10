@@ -67,6 +67,11 @@ jobs:
       - name: Install cbindgen
         run: cargo install --force --debug --version 0.14.1 cbindgen
       - run: echo "::add-path::$HOME/.cargo/bin"
+      # If master has newer commits, github adds a merge commit from master into
+      # our branch.
+      # This screws up git clang-format as it'll format the merge as well and
+      # reports any formatting issues in those commits on master as well.
+      # We don't care about them here. So let's use the real branch HEAD commit.
       - name: Checkout HEAD on branch, not merge commit!
         uses: actions/checkout@v1
         with:
