@@ -35,7 +35,6 @@
 #include "conf.h"
 #include "util-debug.h"
 
-
 #include "util-error.h"
 #include "util-privs.h"
 #include "util-device.h"
@@ -69,7 +68,9 @@ typedef struct PcapThreadVars_
     int datalink;
 
     /* counters */
-    uint32_t pkts; uint64_t bytes; uint32_t errs;
+    uint32_t pkts;
+    uint64_t bytes;
+    uint32_t errs;
 
     uint16_t capture_kernel_packets;
     uint16_t capture_kernel_drops;
@@ -145,7 +146,9 @@ static int PcapTryReopen(PcapThreadVars *ptv)
     ptv->pcap_state = PCAP_STATE_DOWN;
 
     int pcap_activate_r = pcap_activate(ptv->pcap_handle);
-    if (pcap_activate_r != 0) { return pcap_activate_r; }
+    if (pcap_activate_r != 0) {
+        return pcap_activate_r;
+    }
 
     /* set bpf filter if we have one */
     if (ptv->bpf_filter != NULL) {
