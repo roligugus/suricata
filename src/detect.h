@@ -151,13 +151,15 @@ typedef struct DetectAddress_ {
 } DetectAddress;
 
 /** Address grouping head. IPv4 and IPv6 are split out */
-typedef struct DetectAddressHead_ {
+typedef struct DetectAddressHead_
+{
     DetectAddress *ipv4_head;
     DetectAddress *ipv6_head;
 } DetectAddressHead;
 
 
-typedef struct DetectMatchAddressIPv4_ {
+typedef struct DetectMatchAddressIPv4_
+{
     uint32_t ip;    /**< address in host order, start of range */
     uint32_t ip2;   /**< address in host order, end of range */
 } DetectMatchAddressIPv4;
@@ -189,8 +191,7 @@ enum {
 
 /** \brief Port structure for detection engine */
 typedef struct DetectPort_ {
-    uint16_t port;
-    uint16_t port2;
+    uint16_t port; uint16_t port2;
 
     uint8_t flags;  /**< flags for this port */
 
@@ -311,9 +312,7 @@ typedef struct IPOnlyCIDRItem_ {
 /** \brief Used to start a pointer to SigMatch context
  * Should never be dereferenced without casting to something else.
  */
-typedef struct SigMatchCtx_ {
-    int foo;
-} SigMatchCtx;
+typedef struct SigMatchCtx_ { int foo; } SigMatchCtx;
 
 /** \brief a single match condition for a signature */
 typedef struct SigMatch_ {
@@ -378,8 +377,7 @@ typedef struct DetectEngineTransforms {
 } DetectEngineTransforms;
 
 /** callback for getting the buffer we need to prefilter/inspect */
-typedef InspectionBuffer *(*InspectionBufferGetDataPtr)(
-        struct DetectEngineThreadCtx_ *det_ctx,
+typedef InspectionBuffer *(*InspectionBufferGetDataPtr)(struct DetectEngineThreadCtx_ *det_ctx,
         const DetectEngineTransforms *transforms,
         Flow *f, const uint8_t flow_flags,
         void *txv, const int list_id);
