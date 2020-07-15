@@ -449,8 +449,6 @@ jobs:
           # Use that for this test so that the clang-format.sh script finds
           # this old version that is not good enough.
           ln -s /usr/bin/git-clang-format-6.0 /usr/bin/git-clang-format
-          echo "git-clang-format: $(which git-clang-format)"
-          echo "git-clang-format-6.0: $(which git-clang-format-6.0)"
           # Do not use make as it hides the script's exit code
           # make diffstat-style-branch >> check_formatting_log.txt 2>&1
           ./scripts/clang-format.sh check-branch --make --diffstat --show-commits  >> check_formatting_log.txt 2>&1
