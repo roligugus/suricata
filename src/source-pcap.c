@@ -29,6 +29,8 @@
 #include "packet-queue.h"
 #include "threads.h"
 #include "threadvars.h"
+
+
 #include "tm-queuehandlers.h"
 #include "tm-threads.h"
 #include "source-pcap.h"
@@ -52,6 +54,7 @@
  */
 typedef struct PcapThreadVars_
 {
+
     /* thread specific handle */
     pcap_t *pcap_handle;
     /* handle state */
@@ -67,9 +70,7 @@ typedef struct PcapThreadVars_
     int datalink;
 
     /* counters */
-    uint32_t pkts;
-    uint64_t bytes;
-    uint32_t errs;
+    uint32_t pkts; uint64_t bytes; uint32_t errs;
 
     uint16_t capture_kernel_packets;
     uint16_t capture_kernel_drops;
@@ -151,8 +152,7 @@ static int PcapTryReopen(PcapThreadVars *ptv)
 
     /* set bpf filter if we have one */
     if (ptv->bpf_filter != NULL) {
-        if (pcap_compile(ptv->pcap_handle, &ptv->filter,
-                    (char *)ptv->bpf_filter, 1, 0) < 0)
+        if (pcap_compile(ptv->pcap_handle, &ptv->filter, (char *)ptv->bpf_filter, 1, 0) < 0)
         {
             SCLogError(SC_ERR_BPF, "bpf compilation error %s",
                     pcap_geterr(ptv->pcap_handle));
@@ -171,7 +171,8 @@ static int PcapTryReopen(PcapThreadVars *ptv)
     return 0;
 }
 
-static void PcapCallbackLoop(char *user, struct pcap_pkthdr *h, u_char *pkt)
+static void PcapCallbackLoop(
+char *user, struct pcap_pkthdr *h, u_char *pkt)
 {
     SCEnter();
 
@@ -179,9 +180,7 @@ static void PcapCallbackLoop(char *user, struct pcap_pkthdr *h, u_char *pkt)
     Packet *p = PacketGetFromQueueOrAlloc();
     struct timeval current_time;
 
-    if (unlikely(p == NULL)) {
-        SCReturn;
-    }
+    if (unlikely(p == NULL)) { SCReturn; }
 
     PKT_SET_SRC(p, PKT_SRC_WIRE);
     p->ts.tv_sec = h->ts.tv_sec;
