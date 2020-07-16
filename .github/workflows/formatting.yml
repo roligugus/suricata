@@ -101,7 +101,8 @@ jobs:
           echo "last_commit_subject: $last_commit_subject"
           echo "second_last_commit_sha: $second_last_commit_sha"
           echo "$last_commit_subject" | grep -e "^Merge $second_last_commit_sha into [0-9a-f]*$"
-          if [ $? -eq 0 ]; then
+          rc=$?
+          if [ $rc -eq 0 ]; then
               # Last commit was a merge to master - ignore
               echo "Ignoring github merge commit..."
               git checkout HEAD^
