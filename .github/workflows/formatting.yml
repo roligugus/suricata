@@ -67,20 +67,59 @@ jobs:
       - name: Install cbindgen
         run: cargo install --force --debug --version 0.14.1 cbindgen
       - run: echo "::add-path::$HOME/.cargo/bin"
-      # If master has newer commits, github adds a merge commit from master into
-      # our branch.
-      # This screws up git clang-format as it'll format the merge as well and
-      # reports any formatting issues in those commits on master as well.
-      # We don't care about them here. So let's use the real branch HEAD commit.
-      - name: Checkout HEAD on branch, not merge commit!
+      # Checking out the branch is not as simple as "checking out".
+      #
+      # In case master has any new commits since we branched off, github will
+      # automatically add a "merge commit" from our branch to master and check
+      # this out instead of the original last commit on the branch.
+      #
+      # This screws up git clang-format as it'll also format the "merge commit"
+      # and essentially report any formatting issues in the "merge commit".
+      # However, we really don't care about any of the new commits on master.
+      #
+      # There are supposed to be ways to use with/ref to fix that and while
+      # they work perfectly well for pull requests within the forked repo, none
+      # of the ones tried worked for pull requests from forks to the OISF repo.
+      #
+      # My patience simply ran too short to keep on looking. See follow-on
+      # action to manually fix this up.
+      - name: Checkout - might be merge commit!
         uses: actions/checkout@v1
-        with:
-#          ref: ${{ github.head_ref }} # OISF repo does not know our branch
-          # use last commit of branch, not merge!
-          ref: ${{ github.event.pull_request.head.sha }}
+        # Use last commit of branch, not potential merge commit!
+        #
+        # This works perfectly well on pull requests within forked repos, but
+        # not for pull requests from forks to the OISF repo as the latter one
+        # does not know the branch (from the forked repo). Argh.
+#        with:
+#          ref: ${{ github.head_ref }} # check out branch
+
+      # Manually ignore the merge commit as none of the with/ref things tried
+      # with actions/checkout seemed to work for pull requests from forks into
+      # the OISF repo.
       - name: Peel off potential merge request
         run: |
-          git log --oneline -2
+          # The "merge commit" has a distinct subject that we can look for.
+          # If we find it, ignore it by checking out the "real last commit".
+          #
+          # Note, github uses the non-abbreviated sha for the commit subject.
+          #
+          # Commit history example in case github added merge, i.e. if you did
+          # git log --pretty=oneline -2:
+          #   sha_1 Merge sha_2 into latest_sha_on_master
+          #   sha_2 This is the real last commit on branch
+          echo "Last two commits on checkout:"
+          git log --pretty=oneline -2
+          last_commit_subject=$(git log --pretty=%s -1)
+          second_last_commit_sha=$(git log --pretty=%H -2 |tail -1)
+          echo "$last_commit_subject" | grep -e "^Merge $second_last_commit_sha into [0-9a-fA-F]*$" > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+              # Last commit was a merge to master - ignore
+              echo "Found github merge commit - checking out real last commit instead..."
+              git checkout $second_last_commit_sha
+          else
+              echo "No github merge commit found"
+          fi
+        shell: bash {0}
       - run: git clone https://github.com/OISF/libhtp -b 0.5.x
       - run: ./autogen.sh
       - run: ./configure --enable-unittests
