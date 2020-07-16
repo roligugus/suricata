@@ -108,7 +108,7 @@ jobs:
               git checkout HEAD^
           else
               echo "No github merge commit found"
-          endif
+          fi
         shell: bash {0}
       - run: git clone https://github.com/OISF/libhtp -b 0.5.x
       - run: ./autogen.sh
