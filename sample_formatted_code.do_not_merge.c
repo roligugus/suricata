@@ -77,8 +77,7 @@ void if_style()
 void for_loop_style()
 {
     // for (no parens, would fit on one line if wanted)
-    for (int i = 0; i < 32; ++i)
-        i += 1;
+    for (int i = 0; i < 32; ++i) i += 1;
 
     // for (parens, would fit on one line if wanted)
     for (int i = 0; i < 32; ++i) {
@@ -103,8 +102,7 @@ void while_style()
     }
 
     // AllowShortLoopsOnASingleLine
-    while (true)
-        continue;
+    while (true) continue;
 }
 
 void do_while_style()
@@ -445,14 +443,18 @@ void foreach_handling()
     // json_object_foreach and json_array_foreach are "foreach" functions
     if (json_is_object(value)) {
         json_object_foreach (value, key_js, value_js) {
-            bla()
+            bla();
         }
     } else if (json_is_array(value)) {
         json_array_foreach (value, index, value_js) {
-            bla()
+            bla();
         }
     } else if (json_is_integer(value)) {
         ret = AddIntData(alert, key, json_integer_value(value));
+    }
+
+    json_array_foreach (value, index, value_js) {
+        bla();
     }
 
     // These are foreach macros but apart from the odd exception, they

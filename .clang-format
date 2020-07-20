@@ -10,6 +10,7 @@ AlignConsecutiveMacros: true
 AlignEscapedNewlines: Left
 # clang 10: AllowShortBlocksOnASingleLine: Never
 # clang 11: AllowShortEnumsOnASingleLine: false
+AllowShortLoopsOnASingleLine: true
 AllowShortFunctionsOnASingleLine: None
 # BreakBeforeBraces: Mozilla is closest, but does not split empty functions/structs
 BraceWrapping:
