@@ -42,6 +42,14 @@ Note that this modifies the files, but doesn’t commit them – you’ll likely
 
 in order to update the last commit with all pending changes.
 
+.. Argh, github does not support admonitions such as .. note::
+
++--------------------------------------------------------------------+
+| **Note**                                                           |
+|                                                                    |
+| You might have to use ``git clang-format-9`` on e.g. ubuntu 18.04. |
++--------------------------------------------------------------------+
+
 Use make targets
 """"""""""""""""
 Make targets are provided for easier usage, especially if you have multiple
@@ -115,20 +123,13 @@ Installing clang-format and git-clang-format
 ********************************************
 clang-format 9 is required.
 
-TODO - REMOVEME: We could possibly provide an "install-clang-format" script if we wanted to.
-It's essentially a decision of maintaining the install script vs support questions about
-"hey I have ubuntu xyz, what do I need to do?".
-
 On ubuntu 18.04:
 
 - It is sufficient to only install clang-format, e.g.
 
     .. code-block:: bash
 
-        $ wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        $ sudo add-apt-repository "deb http://apt.llvm.org/bionic/   llvm-toolchain-bionic-9  main"
-        $ sudo apt-get update
-        $ sudo apt-get install -y clang-format-9
+        $ sudo apt-get install clang-format-9
 
 - see http://apt.llvm.org for other releases
 
@@ -144,24 +145,17 @@ On fedora:
 Line length
 ^^^^^^^^^^^
 
-There is a soft limit of ~80 characters. There is a hard limit of 100.
+Limit line lengths to 100 characters.
 
 When wrapping lines that are too long, they should be indented at least 8
 spaces from previous line. You should attempt to wrap the minimal portion of
 the line to meet the 80 character limit.
 
-TODO - REMOVEME: 80 vs 100 width? @victorjulien mentioned maybe longer?
-Even linux is on 100 these days. However, keeping it to 80 would induce the
-fewest changes if existing code gets reformatted.
-
-TODO - REMOVEME: We should remove the "soft limit" as clang-format only has a
-hard limit.
-
 TODO - REMOVEME: Reflow comments, i.e. also adjust comments to length? Yup, for
 @jasonish so I set it to do so.
 
 clang-format:
- - ColumnLimit: 80
+ - ColumnLimit: 100
  - ContinuationIndentWidth: 8
  - ReflowComments: true
 
