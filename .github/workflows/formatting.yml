@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-18.04
     container: ubuntu:18.04
 #    continue-on-error: true
-    if: ${{ success() || failure() }}
+#    if: ${{ success() || failure() }}
+#    if: ${{ always() }}
     steps:
 
       # Cache Rust stuff.
@@ -138,6 +139,7 @@ jobs:
               # limit output as it might be a lot in the worst case
               tail -n 100 check_formatting_log.txt
               echo "::error ::Formatting is not following code style guide!"
+              exit 1
           else
               cat check_formatting_log.txt
               # use last output line as error
