@@ -695,9 +695,6 @@ TODO
 
 A .c file shall include it's own header first.
 
-TODO - REMOVEME: clang-format could sort includes and group them if configured
-to do so. This might break compilation until fixed.
-
 clang-format:
  - SortIncludes: false
 
