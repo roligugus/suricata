@@ -15,6 +15,7 @@ jobs:
     name: Formatting Check (clang 9)
     runs-on: ubuntu-18.04
     container: ubuntu:18.04
+    continue-on-error: true
     steps:
 
       # Cache Rust stuff.
@@ -135,7 +136,7 @@ jobs:
           elif [ $rc -eq 1 ]; then
               # limit output as it might be a lot in the worst case
               tail -n 100 check_formatting_log.txt
-              echo "::warning ::Formatting is not following code style guide!"
+              echo "::error ::Formatting is not following code style guide!"
           else
               cat check_formatting_log.txt
               # use last output line as error
