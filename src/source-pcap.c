@@ -50,8 +50,7 @@
 /**
  * \brief Structure to hold thread specific variables.
  */
-typedef struct PcapThreadVars_
-{
+typedef struct PcapThreadVars_{
     /* thread specific handle */
     pcap_t *pcap_handle;
     /* handle state */
@@ -67,9 +66,7 @@ typedef struct PcapThreadVars_
     int datalink;
 
     /* counters */
-    uint32_t pkts;
-    uint64_t bytes;
-    uint32_t errs;
+    uint32_t pkts;uint64_t bytes;uint32_t errs;
 
     uint16_t capture_kernel_packets;
     uint16_t capture_kernel_drops;
@@ -132,7 +129,8 @@ void TmModuleDecodePcapRegister (void)
 static inline void PcapDumpCounters(PcapThreadVars *ptv)
 {
     struct pcap_stat pcap_s;
-    if (likely((pcap_stats(ptv->pcap_handle, &pcap_s) >= 0))) {
+    if (likely((pcap_stats(ptv->pcap_handle, &pcap_s) >= 0)))
+    {
         StatsSetUI64(ptv->tv, ptv->capture_kernel_packets, pcap_s.ps_recv);
         StatsSetUI64(ptv->tv, ptv->capture_kernel_drops, pcap_s.ps_drop);
         (void) SC_ATOMIC_SET(ptv->livedev->drop, pcap_s.ps_drop);
@@ -145,9 +143,7 @@ static int PcapTryReopen(PcapThreadVars *ptv)
     ptv->pcap_state = PCAP_STATE_DOWN;
 
     int pcap_activate_r = pcap_activate(ptv->pcap_handle);
-    if (pcap_activate_r != 0) {
-        return pcap_activate_r;
-    }
+    if (pcap_activate_r != 0) { return pcap_activate_r; }
 
     /* set bpf filter if we have one */
     if (ptv->bpf_filter != NULL) {
